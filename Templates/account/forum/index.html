@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <p>Добро пожаловать</p>
+    {% for Themes in Themess %}
+        {% if Themes.forum_id == cur_forum %}
+        <h2>
+            <a href='{{'theme'}}/{{Themes.name}}'> {{ Themes }}</a>
+        </h2>
+        {% endif %}
+    {% endfor %}
+    <p>Создать новую тему</p>
+    <div class="theme-form">
+        <form action= "{{slug.name}}" method="post">
+            {{ theme_form.as_p}}
+            {% csrf_token %}
+            <p><input type="submit" value="Создать тему"></p>
+        </form>
+    </div>
+    <p></p>
+    <a href = "dashboard">Назад</a>
+{% endblock %}

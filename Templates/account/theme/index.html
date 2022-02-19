@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1></h1>
+    <h2>{{ slug }}</h2>
+    <p>
+    {% for Post in Posts %}
+        {% if Post.theme_id == cur_theme %}
+        <h3>{{ Post.sender_id.username }}</h3>
+        <p>{{ Post }}
+        {% endif %}
+    {% endfor %}
+
+
+    <p>Создать новый пост</p>
+    <div class="theme-form">
+        <form action= "{{slug.name}}" method="post">
+            {{ post_form.as_p}}
+            {% csrf_token %}
+            <p><input type="submit" value="Отправить пост"></p>
+        </form>
+    </div>
+
+    <p></p>
+    <a href = "{{slug.id}}../{{slug}}">Назад</a>
+{% endblock %}

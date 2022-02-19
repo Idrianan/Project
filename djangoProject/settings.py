@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,10 +25,41 @@ SECRET_KEY = 'django-insecure-v@=(w)@it42-@m4cx77p13g)-4xfa962@a(_==o73$vv%g%r$w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+TEMPLATES = [
 
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+            ],
+        },
+    },
+]
 # Application definition
+LOGIN_URL = '/account/login'
+LOGIN_REDIRECT_URL = '/account/dashboard'
+SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
+DEFAULT_FROM_EMAIL = 'project_forum@bk.ru'
+SERVER_EMAIL = 'project_forum@bk.ru'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'mail.com'
+EMAIL_HOST_USER = 'email'
+EMAIL_HOST_PASSWORD = 'qwe1rty3'
+EMAIL_PORT = 587
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,9 +68,39 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'boards',
+    'social_django',
+    'account',
 ]
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.vk.VKAppOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+VK_APP_ID = '8083511'
+VKONTAKTE_APP_ID = VK_APP_ID
+VK_API_SECRET = '2M29S4iWXZ5bJToDCCEw'
+VKONTAKTE_APP_SECRET = VK_API_SECRET
+LOGIN_ERROR_URL = '/profile/error/'
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/profile/error/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/profile/'
+SOCIAL_AUTH_VK_OAUTH2_KEY = '8083511'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = '2M29S4iWXZ5bJToDCCEw'
+
+SOCIAL_AUTH_CREATE_USERS = True
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,26 +110,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoProject.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
